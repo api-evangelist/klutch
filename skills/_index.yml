@@ -1,0 +1,41 @@
+generated: '2026-07-19'
+method: generated
+source: graphql/klutch-graphql-operations.yml, postman/klutch-public-api-postman.json,
+  https://github.com/KlutchCard/api-samples
+note: >-
+  Klutch publishes no AGENTS.md or skill files of its own (searched: klutchcard.com,
+  the docs host, and the KlutchCard GitHub org). These skills are generated from the
+  provider's own published operations — every operation name, argument, enum value and
+  event type used below is transcribed from the Klutch Public API Postman collection or
+  the official KlutchCard/api-samples repository. None are invented.
+api: https://graphql.klutchcard.com/graphql
+skills:
+- file: klutch-spend-analysis.md
+  name: Klutch spend analysis
+  api: graphql/klutch-graphql-operations.yml
+  risk: read-only
+  operations: [createSessionToken, transactionsPaginated, sumTransactions, groupTransactions,
+    transactionCategories]
+- file: klutch-virtual-card-issuing.md
+  name: Klutch virtual card issuing and control
+  api: graphql/klutch-graphql-operations.yml
+  risk: consequential
+  operations: [createSessionToken, cards, createCard, card.activateCard, card.editCard,
+    card.lock, card.unlock, card.cancelCard]
+- file: klutch-spending-controls.md
+  name: Klutch spending controls
+  api: graphql/klutch-graphql-operations.yml
+  risk: consequential
+  operations: [createSessionToken, cards, transactionRules, createTransactionRule,
+    transactionRule.disableFor, transactionRule.delete]
+- file: klutch-pay-card-balance.md
+  name: Klutch pay card balance
+  api: graphql/klutch-graphql-operations.yml
+  risk: moves-money
+  operations: [createSessionToken, account.revolvingLoan, transferSources, createPayment]
+- file: klutch-miniapp-webhook-handler.md
+  name: Klutch Mini App webhook handler
+  api: graphql/klutch-graphql-operations.yml
+  risk: consequential
+  operations: [createSessionToken, transaction, transaction.item.change, transactionCategories,
+    recipeInstall.createToken, recipeInstall.addPanel, recipeInstall.panel.changeData]

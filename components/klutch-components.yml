@@ -1,0 +1,44 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.npmjs.com/package/@klutch-card/klutch-components,
+  https://api-docs.klutchcard.com/ (Klutch Public API Postman collection),
+  https://github.com/KlutchCard/miniapp-example
+summary: >-
+  Klutch's client-side component surface is the Mini App panel system: a third-party
+  Mini App renders UI *inside* the Klutch mobile app by registering panels built from
+  the first-party @klutch-card/klutch-components library. This is not an embeddable
+  web widget for the developer's own site — the host surface is Klutch's app, and the
+  developer supplies a template file plus JSON data that Klutch renders.
+families:
+- name: Mini App panels
+  description: >-
+    Surfaces a Mini App can place into the Klutch app, attached to an entity and
+    rendered from a template file with JSON data. Panels are created, updated and
+    removed through the GraphQL API using a per-install token.
+  loader: '@klutch-card/klutch-components'
+  registry: npm
+  version: 0.4.11
+  license: ISC
+  repository: https://github.com/KlutchCard/klutch-components
+  example: https://github.com/KlutchCard/miniapp-example
+  placements:
+  - name: Home panel
+    description: A panel on the Klutch home surface.
+    operation: 'recipeInstall(id:) { addPanel(templateFileName:, data:, entity:, size:) }'
+  - name: Transaction panel
+    description: A panel attached to a transaction entity.
+    operation: 'recipeInstall(id:) { addPanel(templateFileName:, data:, entity:, size:) }'
+  operations:
+  - {name: recipeInstall.createToken, purpose: Mint the per-install token a Mini App
+      uses to act for one user.}
+  - {name: recipeInstall.addPanel, purpose: Add a home or transaction panel.}
+  - {name: recipeInstall.panel.changeData, purpose: Update the JSON data backing a panel.}
+  - {name: recipeInstall.panel.delete, purpose: Remove a panel.}
+  arguments:
+  - {name: templateFileName, type: String}
+  - {name: data, type: JsonString}
+  - {name: entity, type: Entity}
+  - {name: size, type: RecipeSize}
+related:
+  packages: packages/klutch-packages.yml
+  cli: cli/klutch-cli.yml

@@ -1,0 +1,41 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.npmjs.com/package/@klutch-card/klutch-cli
+name: Klutch Card CLI
+binary: klutch
+package: '@klutch-card/klutch-cli'
+version: 1.1.3
+license: MIT
+status: early access
+audience: Mini App developers
+description: >-
+  First-party CLI for Klutch Mini App development. Generates the Mini App signing key
+  pair, scaffolds a blank Mini App, logs the developer in, publishes a Mini App to the
+  Klutch sandbox environment, and manages sandbox test users.
+install:
+- method: npm
+  command: npm i -g @klutch-card/klutch-cli
+prerequisites:
+- A Klutch developer account registered at https://dev.klutchcard.com/
+- Node.js and npm
+- A configured Mini App uploaded to the developer portal
+- Expo (for launching the Mini App in debug mode)
+commands:
+- group: keys
+  commands:
+  - {command: klutch generateKey, description: Generate the signing keys for a Mini App.}
+- group: project
+  commands:
+  - {command: klutch init, description: Create a blank Mini App template.}
+  - {command: klutch publish, description: Publish a Mini App to the Klutch sandbox
+      environment.}
+- group: auth
+  commands:
+  - {command: klutch login, description: Log in as a Klutch developer.}
+- group: test users
+  commands:
+  - {command: klutch test-users list, description: List sandbox test users.}
+  - {command: klutch test-users create, description: Create a sandbox test user.}
+related:
+  packages: packages/klutch-packages.yml
+  sandbox: sandbox/klutch-sandbox.yml

@@ -1,0 +1,68 @@
+generated: '2026-07-19'
+method: searched
+source: live probes of /.well-known/* on every Klutch host in apis.yml
+notes: >-
+  Klutch publishes RFC 8414 OAuth 2.0 Authorization Server Metadata on all three API
+  hosts (production GraphQL, sandbox GraphQL, and the remote MCP server) and RFC 9728
+  OAuth 2.0 Protected Resource Metadata on the MCP server. No security.txt, no
+  OpenID Connect discovery document, no api-catalog and no ai-plugin.json were found
+  on any host.
+hosts:
+- host: https://graphql.klutchcard.com
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: klutch-graphql-oauth-authorization-server.json
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://sandbox.klutchcard.com
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: klutch-sandbox-oauth-authorization-server.json
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://mcp.klutchcard.com
+  documents:
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: klutch-mcp-oauth-protected-resource.json
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: klutch-mcp-oauth-authorization-server.json
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/mcp.json
+    status: 404
+- host: https://www.klutchcard.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://api-docs.klutchcard.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404

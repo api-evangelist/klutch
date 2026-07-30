@@ -1,0 +1,56 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.klutchcard.com/articles/swipe-twice-preventing-compulsive-spending-using-klutch-api,
+  https://github.com/KlutchCard/api-samples
+spec_type: none
+spec_note: >-
+  Klutch publishes NO AsyncAPI document — /asyncapi.yaml, the docs host and the
+  KlutchCard GitHub org were all checked and none exists. What follows is the webhook
+  catalog captured verbatim from Klutch's own tutorial articles and the official
+  api-samples code; no event, field or payload here is invented, and no AsyncAPI spec
+  has been fabricated on the provider's behalf.
+transport:
+  style: HTTP webhook (POST JSON to a developer-supplied URL)
+  registration: >-
+    Configured from the Klutch account UI under "My Account" -> "Developers". No
+    programmatic subscription API is documented.
+  delivery_semantics: not documented
+  signature_verification: not documented
+  retries: not documented
+envelope:
+  shape: |
+    {
+      "principal": { "entityID": "<<USERID>>" },
+      "event": {
+        "_alloyCardType": "com.alloycard.core.entities.transaction.TransactionCreatedEvent",
+        "transaction": { "entityID": "txn_..." }
+      }
+    }
+  discriminator: event._alloyCardType
+  discriminator_note: >-
+    The type discriminator still carries the company's pre-rebrand "alloycard"
+    namespace. Consumers must switch on this string and ignore unrecognized values —
+    both official samples do exactly that.
+  principal: principal.entityID is the Klutch user the event belongs to.
+  payload_is_reference: >-
+    Events carry entity IDs, not full objects. Handlers re-read state through the
+    GraphQL API (e.g. `transaction(id:) { transactionStatus declineReason items }`)
+    after receiving an event.
+events:
+- name: com.alloycard.core.entities.transaction.TransactionCreatedEvent
+  summary: A card transaction was created (authorization attempt, approved or declined).
+  payload_fields: [principal.entityID, event._alloyCardType, event.transaction.entityID]
+  follow_up_operations: ['transaction(id:) { transactionStatus declineReason }']
+  used_by: swipe-twice sample — detects a decline caused by a user rule and calls
+    transactionRule.disableFor to permit the retry.
+  source: https://github.com/KlutchCard/api-samples
+- name: com.alloycard.core.entities.transaction.TransactionItemCreatedEvent
+  summary: A line item was created on a transaction (itemized/enriched purchase data).
+  payload_fields: [principal.entityID, event._alloyCardType, event.transaction.entityID]
+  follow_up_operations: ['transaction(id:) { items { ... } }', 'transaction.item.change(categoryId:)']
+  used_by: ai-product-categorization sample — categorizes each item and writes the
+    category back.
+  source: https://github.com/KlutchCard/api-samples
+catalog_completeness: >-
+  Partial. These are the two event types Klutch demonstrates publicly; Klutch does not
+  publish a complete event catalog, so other event types may exist.

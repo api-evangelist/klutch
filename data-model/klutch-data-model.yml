@@ -1,0 +1,112 @@
+generated: '2026-07-19'
+method: derived
+source: graphql/klutch-graphql-operations.yml, postman/klutch-public-api-postman.json,
+  https://github.com/KlutchCard/api-samples
+note: >-
+  Entity graph derived from the selection sets and argument names in Klutch's own
+  published operations. Introspection is disabled, so field lists are those actually
+  requested in the published documents and are not exhaustive.
+entities:
+- name: Account
+  description: The cardholder account, carrying the revolving credit line.
+  fields: [revolvingLoan]
+  relationships:
+  - {type: has_one, target: RevolvingLoan, via: revolvingLoan}
+  - {type: has_many, target: Card}
+  - {type: has_many, target: TransferSource}
+- name: RevolvingLoan
+  description: Balance and credit limit of the revolving line.
+  fields: [balance, limit]
+  relationships:
+  - {type: belongs_to, target: Account}
+- name: Card
+  description: A physical or virtual Klutch card.
+  fields: [id, name, status, lastFour, expirationDate, media, lockState]
+  enums: {media: CardMedia, terminateReason: TerminateReason}
+  relationships:
+  - {type: has_many, target: Transaction}
+  - {type: has_many, target: TransactionRule, via: cardIds}
+  - {type: belongs_to, target: Account}
+- name: Transaction
+  description: A card authorization with enriched merchant and acquirer metadata.
+  fields: [id, transactionDate, transactionStatus, transactionType, declineReason,
+    merchantName, amount, zipCode, streetAddress, city, state, merchantId, cardPresent,
+    cardHolderPresent, entryMode, terminalType, terminalId, merchantLogo, mid,
+    merchantOfficialPage, merchantPhoneNumber, cardAcceptorId, items]
+  relationships:
+  - {type: belongs_to, target: Card, via: card}
+  - {type: has_one, target: TransactionCategory, via: category}
+  - {type: has_one, target: MCC, via: mcc}
+  - {type: has_many, target: TransactionItem, via: items}
+- name: TransactionItem
+  description: A line item within a transaction; individually categorizable.
+  fields: [id, category]
+  relationships:
+  - {type: belongs_to, target: Transaction}
+  - {type: has_one, target: TransactionCategory, via: category}
+- name: TransactionCategory
+  description: A user-defined spending category, optionally mapped to MCCs.
+  fields: [id, name, mccs]
+  relationships:
+  - {type: has_many, target: Transaction}
+  - {type: has_many, target: TransactionItem}
+- name: MCC
+  description: Merchant category code assigned by the card network.
+  fields: [code, description, category]
+  relationships:
+  - {type: has_many, target: Transaction}
+- name: TransactionRule
+  description: A server-side spend control evaluated at authorization time.
+  fields: [id, name, displayName, cards, createdAt, createdBy, spec]
+  relationships:
+  - {type: has_many, target: Card, via: cardIds}
+  - {type: has_one, target: TransactionRuleSpec, via: spec}
+  - {type: belongs_to, target: Principal, via: createdBy}
+- name: TransactionRuleSpec
+  description: Polymorphic rule specification.
+  variants: [AccumulatingOverPeriodRuleSpec, AccumulateBetweenDatesRuleSpec,
+    DeclineBasedOnFilterRuleSpec, DayOfWeekRuleSpec, TimeOfDayRuleSpec]
+  fields: [specType, period, amount, filters, filter]
+  relationships:
+  - {type: belongs_to, target: TransactionRule}
+- name: RuleFilter
+  description: A single predicate in a rule spec.
+  fields: [field, value, operator, invert]
+  enums:
+    field: [ADDRESS, AMOUNT, CARDHOLDER_PRESENT, CARD_PRESENT, CITY, ENTRY_MODE, ID,
+      LEGAL_NAME, MCC, MERCHANT_ID, MERCHANT_NAME, STATE, TERMINAL_ID, ZIP_CODE]
+    operator: [CONTAINS, EQUALS, GREATER, GREATER_EQUALS, LESS, LESS_EQUALS, REGEX_MATCHES,
+      STARTS_WITH]
+- name: Payment
+  description: An ACH payment toward the card balance.
+  fields: [id, paymentStatus, paymentType, amount]
+  relationships:
+  - {type: belongs_to, target: TransferSource, via: transferSourceId}
+  - {type: belongs_to, target: Account}
+- name: TransferSource
+  description: A funding source used to pay the card.
+  fields: [id, name, status]
+  enums: {status: [PENDING, ACTIVE, DELETED]}
+  relationships:
+  - {type: has_many, target: Payment}
+- name: RecipeInstall
+  description: One installation of a Mini App ("recipe") for one user.
+  fields: [id]
+  relationships:
+  - {type: has_many, target: Panel}
+  - {type: belongs_to, target: Principal}
+- name: Panel
+  description: A Mini App-rendered surface inside the Klutch app, backed by a template
+    file and JSON data.
+  fields: [id, templateFileName, data, entity, size]
+  relationships:
+  - {type: belongs_to, target: RecipeInstall}
+- name: Principal
+  description: The acting identity on an event or a created object.
+  fields: [entityID, type]
+id_conventions:
+  observed_prefixes:
+  - {entity: Transaction, prefix: 'txn_', source: 'webhook payload example in the
+      swipe-twice article'}
+  note: Klutch publishes no complete id-prefix reference; only txn_ was observed.
+render: null

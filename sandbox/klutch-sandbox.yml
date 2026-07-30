@@ -1,0 +1,66 @@
+generated: '2026-07-19'
+method: searched
+source: https://api-docs.klutchcard.com/ (Klutch Public API Postman collection),
+  https://www.npmjs.com/package/@klutch-card/klutch-cli
+summary: >-
+  Klutch runs a separate sandbox GraphQL endpoint for Mini App developers who need to
+  test from a multi-user perspective, plus sandbox-only mutations that simulate the
+  full card-network lifecycle of a transaction (authorize, reverse, settle). Test users
+  are created with the Klutch CLI. Klutch publishes no magic test card numbers, test
+  bank accounts or test clocks — a sandbox card is issued to a created test user and
+  its real card number is used with the simulation mutations.
+environments:
+- name: production
+  endpoint: https://graphql.klutchcard.com/graphql
+  description: Users access their own live data.
+- name: sandbox
+  endpoint: https://sandbox.klutchcard.com/graphql
+  description: Available to Mini App developers who need to test from a multi-user
+    perspective.
+credentials:
+  model: client id + secret key exchanged for a bearer session token via createSessionToken
+  issued_from: Klutch account -> "My Account" -> "Developers"
+  sample_env:
+    KLUTCH_ENDPOINT: https://graphql.klutchcard.com/graphql
+    KLUTCH_CLIENT_ID: your-client-id
+    KLUTCH_SECRET_KEY: your-secret-key
+  source: https://github.com/KlutchCard/api-samples
+test_users:
+  tooling: '@klutch-card/klutch-cli'
+  commands:
+  - klutch test-users list
+  - klutch test-users create
+  publish: klutch publish   # publishes a Mini App to the Klutch sandbox environment
+simulation:
+  description: >-
+    Sandbox-only GraphQL mutations under the `sandbox` root that drive a transaction
+    through its lifecycle so rules, webhooks and Mini App logic can be exercised without
+    a real card swipe.
+  operations:
+  - name: sandbox.createTransaction
+    purpose: Simulate an authorization against a sandbox card.
+    arguments:
+    - {name: cardNumber, type: String}
+    - {name: merchantName, type: String}
+    - {name: amount, type: Float}
+    - {name: mcc, type: String}
+    - {name: cardPresent, type: CardPresent}
+    - {name: cardHolderPresent, type: CardHolderPresent}
+    - {name: entryMode, type: EntryMode}
+    returns: [id, transactionDate, transactionStatus, merchantName, amount]
+  - name: sandbox.reverseTransaction
+    purpose: Reverse a previously simulated authorization.
+    arguments:
+    - {name: id, type: String}
+  - name: sandbox.settleTransaction
+    purpose: Settle a previously simulated authorization, optionally for a different
+      amount (partial settlement).
+    arguments:
+    - {name: id, type: String}
+    - {name: amount, type: Float}
+test_values:
+  published: false
+  note: >-
+    No published test card numbers, test IBANs/bank accounts, hosted test tokens or
+    test clocks. NEVER invent them — simulate against a card belonging to a CLI-created
+    sandbox test user.

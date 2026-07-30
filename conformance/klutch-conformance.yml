@@ -1,0 +1,86 @@
+generated: '2026-07-19'
+method: derived
+source: well-known/klutch-graphql-oauth-authorization-server.json,
+  well-known/klutch-mcp-oauth-protected-resource.json,
+  postman/klutch-public-api-postman.json, live probes
+note: >-
+  Standards conformance derived from artifacts in this repo and live probes. Klutch
+  publishes no compliance program page (no SOC 2 / PCI DSS / ISO 27001 claims were
+  found on the site, and no trust center exists), so no Compliance pointer is emitted.
+standards:
+- id: graphql
+  conforms: true
+  evidence: Single GraphQL endpoint per environment; standard errors[] envelope.
+- id: oauth2
+  conforms: true
+  evidence: Authorization code flow advertised at /oauth/authorize + /oauth/token on
+    all three hosts.
+- id: oauth2-pkce-rfc7636
+  conforms: true
+  evidence: code_challenge_methods_supported = ["S256"].
+- id: rfc8414-authorization-server-metadata
+  conforms: true
+  evidence: /.well-known/oauth-authorization-server returns 200 on graphql, sandbox
+    and mcp hosts.
+- id: rfc9728-protected-resource-metadata
+  conforms: true
+  evidence: /.well-known/oauth-protected-resource returns 200 on mcp.klutchcard.com;
+    401 responses carry a WWW-Authenticate challenge referencing it.
+- id: rfc7591-dynamic-client-registration
+  conforms: true
+  evidence: registration_endpoint published in the authorization server metadata.
+- id: rfc6750-bearer-token
+  conforms: true
+  evidence: bearer_methods_supported = ["header"]; Authorization Bearer on every call.
+- id: openid-connect-discovery
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on every host, though OIDC
+    scopes (openid/email/phone/profile), an RS256 id_token alg, a jwks_uri and a
+    userinfo_endpoint are all advertised via the OAuth metadata.
+- id: mcp-model-context-protocol
+  conforms: true
+  evidence: Remote MCP server at https://mcp.klutchcard.com implementing the MCP
+    authorization spec (401 + WWW-Authenticate + resource metadata).
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 on every host.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use the GraphQL errors[] envelope with extensions.classification,
+    not application/problem+json.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset/Deprecation header support or deprecation policy published.
+- id: openapi
+  conforms: false
+  evidence: No OpenAPI document published; the contract is a Postman collection over
+    GraphQL.
+- id: asyncapi
+  conforms: false
+  evidence: Webhooks are documented in prose/samples only; no AsyncAPI document exists.
+- id: idempotency
+  conforms: false
+  evidence: No idempotency key or request-deduplication contract documented.
+- id: cursor-pagination
+  conforms: true
+  evidence: transactionsPaginated exposes limit + nextCursor with a nextCursor in the
+    response.
+- id: iso8583-acquirer-metadata
+  conforms: true
+  evidence: Transactions expose card-network fields — mcc, entryMode, terminalType,
+    terminalId, cardPresent, cardHolderPresent, cardAcceptorId, mid, merchantId.
+- id: dnssec
+  conforms: true
+  evidence: security/klutch-domain-security.yml — DNSSEC enabled on klutchcard.com.
+- id: dmarc
+  conforms: true
+  evidence: security/klutch-domain-security.yml — DMARC present with policy reject.
+- id: hsts
+  conforms: true
+  evidence: security/klutch-domain-security.yml — HSTS max-age 31536000 on the web
+    hosts.
+compliance_program:
+  published: false
+  trust_center: false
+  certifications: []
+  note: No SOC 2, ISO 27001, PCI DSS or HIPAA claim found on any Klutch surface.

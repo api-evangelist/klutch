@@ -1,0 +1,52 @@
+generated: '2026-07-19'
+method: searched
+status: published
+source: https://www.klutchcard.com/articles/klutch-mcp
+server:
+  name: klutch
+  transport: http
+  url: https://mcp.klutchcard.com
+  docs: https://www.klutchcard.com/mini-apps/klutch-mcp
+  article: https://www.klutchcard.com/articles/klutch-mcp
+  distribution: remote hosted server, installed as the "Klutch MCP" Mini App and
+    connected from the LLM client's connector settings.
+  clients:
+  - Claude
+  - ChatGPT
+probe:
+  date: '2026-07-19'
+  request: 'POST https://mcp.klutchcard.com/ (JSON-RPC initialize, no credentials)'
+  status: 401
+  www_authenticate: 'Bearer realm="klutch", resource_metadata="https://mcp.klutchcard.com/.well-known/oauth-protected-resource"'
+  note: >-
+    The server is live and implements the MCP authorization spec correctly — an
+    unauthenticated call returns 401 with a WWW-Authenticate challenge pointing at
+    RFC 9728 protected-resource metadata. Because the server requires a
+    user-consented OAuth token, the tool list below could not be enumerated via
+    tools/list and is NOT recorded here; the capabilities section reflects only what
+    Klutch publicly documents.
+authorization:
+  model: OAuth 2.1 authorization code with PKCE (S256)
+  protected_resource_metadata: https://mcp.klutchcard.com/.well-known/oauth-protected-resource
+  authorization_server_metadata: https://mcp.klutchcard.com/.well-known/oauth-authorization-server
+  authorization_endpoint: https://mcp.klutchcard.com/oauth/authorize
+  token_endpoint: https://mcp.klutchcard.com/oauth/token
+  registration_endpoint: https://mcp.klutchcard.com/oauth/register
+  dynamic_client_registration: true
+  scopes_supported: [openid, email, phone, profile]
+  bearer_methods_supported: [header]
+  issuer: https://cognito-idp.us-west-2.amazonaws.com/us-west-2_LSWgwjdrS
+documented_capabilities:
+- Query spending by category and time period
+- Review active subscriptions
+- Check budget status
+- Identify largest purchases
+- Calculate cashback earned
+- Lock cards and change card controls
+- Create spending rules and set transaction limits
+tools: []
+tools_note: >-
+  Not enumerated. Klutch does not publish a tool manifest and tools/list requires an
+  authenticated user token. Do not infer tool names from the GraphQL surface — see
+  graphql/klutch-graphql-operations.yml for the underlying operations the server
+  most plausibly wraps.

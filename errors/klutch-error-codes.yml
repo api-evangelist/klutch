@@ -1,0 +1,57 @@
+generated: '2026-07-19'
+method: derived
+source: postman/klutch-public-api-postman.json, live probes of
+  https://graphql.klutchcard.com/graphql and https://mcp.klutchcard.com,
+  https://github.com/KlutchCard/api-samples
+format: graphql-errors
+format_note: >-
+  Klutch does NOT use RFC 9457 problem+json. Being a single-endpoint GraphQL API, it
+  returns HTTP 200 with a top-level `errors[]` array; each error carries `message`,
+  `locations`, optional `path`, and an `extensions.classification` string that is the
+  closest thing Klutch has to a machine-readable error code. Klutch publishes no error
+  reference page, so only classifications actually observed on the wire are recorded
+  below. This catalogue is deliberately short rather than invented.
+envelope:
+  http_status: 200 (GraphQL-level errors)
+  fields:
+  - {name: 'errors[].message', description: Human-readable message.}
+  - {name: 'errors[].locations', description: Line/column in the submitted document.}
+  - {name: 'errors[].path', description: Path to the offending field.}
+  - {name: 'errors[].extensions.classification', description: Machine-readable error
+      class.}
+problems:
+- classification: IntrospectionDisabled
+  message: Introspection has been disabled for this request
+  http_status: 200
+  observed: '2026-07-19 on both https://graphql.klutchcard.com/graphql and https://sandbox.klutchcard.com/graphql'
+  remediation: >-
+    Do not rely on introspection or schema-driven codegen. Use the published Postman
+    collection and graphql/klutch-graphql-operations.yml as the operation contract.
+transport_errors:
+- status: 401
+  body: Missing Authorization header
+  www_authenticate: 'Bearer realm="klutch", resource_metadata="https://mcp.klutchcard.com/.well-known/oauth-protected-resource"'
+  observed: '2026-07-19 on https://mcp.klutchcard.com'
+  remediation: Obtain a bearer token (createSessionToken, or OAuth 2.1 authorization
+    code with PKCE) and send it in the Authorization header.
+domain_outcomes:
+  note: >-
+    Distinct from API errors: a *card* outcome is not an error envelope, it is a field
+    on the transaction. A declined authorization is returned as a normal transaction
+    with transactionStatus == "DECLINED" and a free-text `declineReason`. Klutch
+    publishes no enumerated decline-code list, so errors/klutch-decline-codes.yml is
+    intentionally absent.
+  fields:
+  - {name: transaction.transactionStatus, values_observed: [DECLINED], note: Full
+      enum not published.}
+  - name: transaction.declineReason
+    type: String (free text)
+    note: >-
+      When a decline is caused by a user's own transaction rule, the reason text
+      contains the rule's display name — the official swipe-twice sample matches on
+      `declineReason.includes("Swipe Twice")` and then calls
+      transactionRule.disableFor to let the retry through.
+    source: https://github.com/KlutchCard/api-samples
+related:
+  conventions: conventions/klutch-conventions.yml
+  operations: graphql/klutch-graphql-operations.yml

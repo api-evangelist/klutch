@@ -1,0 +1,91 @@
+generated: '2026-07-19'
+method: searched
+source: postman/klutch-public-api-postman.json, graphql/klutch-graphql-operations.yml,
+  https://github.com/KlutchCard/api-samples
+summary: >-
+  Klutch is a single-endpoint GraphQL API. Everything is POSTed as JSON to one URL per
+  environment with a bearer token; there are no REST resource paths, no HTTP verb
+  semantics and no per-resource status codes. Cross-cutting behavior is therefore
+  expressed in the GraphQL schema itself: cursor pagination on the paginated
+  transaction query, a structured filter input reused across list/sum/group
+  operations, and nested mutation namespaces (card(id:){...}, transactionRule(id:){...},
+  recipeInstall(id:){...}, sandbox{...}) instead of verbs.
+transport:
+  protocol: GraphQL over HTTP POST
+  content_type: application/json
+  endpoints:
+    production: https://graphql.klutchcard.com/graphql
+    sandbox: https://sandbox.klutchcard.com/graphql
+  introspection: disabled on both endpoints
+authentication:
+  style: 'Bearer token in the Authorization header'
+  acquisition: createSessionToken(clientId, secretKey) mutation, or OAuth 2.1
+    authorization code with PKCE
+  detail: authentication/klutch-authentication.yml
+idempotency:
+  supported: false
+  documented: false
+  note: >-
+    Klutch documents no idempotency key, no request-deduplication window and no
+    Idempotency-Key equivalent. Mutations such as createPayment and createCard should
+    be assumed non-idempotent; retry only after re-reading state (transferSources /
+    cards / transactions). Recorded as absent — do not assume safe retries.
+pagination:
+  style: cursor
+  operation: transactionsPaginated
+  request_params:
+  - {name: limit, type: Int, purpose: page size}
+  - {name: nextCursor, type: String, purpose: opaque forward cursor}
+  - {name: sortOrder, type: TransactionSortOrder, purpose: sort direction}
+  - {name: filter, type: TransactionFilter, purpose: server-side filtering}
+  response_fields:
+  - {name: nextCursor, purpose: cursor to pass on the following call; absent/null at end}
+  - {name: list, purpose: the page of transactions}
+  note: The unpaginated `transactions` query and the filtered `transactions(filter:)`
+    form are the legacy shape; the latter is explicitly marked DEPRECATED.
+filtering:
+  input: TransactionFilter
+  fields: [startDate, endDate, cardIds, transactionStatus, transactionTypes]
+  reused_by: [transactionsPaginated, sumTransactions, groupTransactions]
+aggregation:
+  operations: [sumTransactions, groupTransactions]
+  group_by_properties: [CARD, MERCHANT_NAME, TRANSACTION_STATUS, TRANSACTION_TYPE, CATEGORY]
+  group_by_operations: [SUM, COUNT, AVERAGE]
+  note: Aggregation is done server-side rather than by paging the whole history client-side.
+field_selection:
+  style: native GraphQL selection sets
+  note: >-
+    GraphQL selection sets replace sparse-fieldsets/expansion conventions — a caller
+    asks for exactly the fields it needs, and nested objects (card, category, mcc,
+    items) are traversed inline rather than expanded via a query parameter.
+metadata:
+  user_defined: >-
+    Transaction categories are user-defined and mutable (createTransactionCategory,
+    rename, delete) and line items can be re-categorized individually
+    (transaction.item.change) — this is the extension point Mini Apps write enrichment
+    back into.
+request_tracing:
+  documented: false
+  note: No request-id / correlation-id header is documented.
+versioning:
+  scheme: unversioned endpoint
+  detail: lifecycle/klutch-lifecycle.yml
+error_envelope:
+  shape: standard GraphQL errors[] array alongside data
+  fields: [message, locations, path, extensions.classification]
+  observed_example: '{"errors":[{"message":"Introspection has been disabled for this
+    request","locations":[{"line":1,"column":2}],"extensions":{"classification":"IntrospectionDisabled"}}]}'
+  transport_errors: 'HTTP 401 with a plain-text body and a WWW-Authenticate challenge
+    when the Authorization header is missing (observed on the MCP host).'
+  detail: errors/klutch-error-codes.yml
+rate_limits:
+  documented: false
+  note: Klutch publishes no rate-limit policy and no rate-limit response headers are
+    documented.
+events:
+  webhooks: asyncapi/klutch-webhooks.yml
+related:
+  authentication: authentication/klutch-authentication.yml
+  errors: errors/klutch-error-codes.yml
+  lifecycle: lifecycle/klutch-lifecycle.yml
+  sandbox: sandbox/klutch-sandbox.yml

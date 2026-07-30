@@ -1,0 +1,152 @@
+generated: '2026-07-19'
+method: derived
+source: postman/klutch-public-api-postman.json, https://github.com/KlutchCard/api-samples
+schema_note: >-
+  Klutch disables GraphQL introspection on both the production and sandbox endpoints
+  (`{"message":"Introspection has been disabled for this request",
+  "extensions":{"classification":"IntrospectionDisabled"}}`), so no SDL could be
+  harvested. Every operation, argument and type name below is transcribed verbatim
+  from the documents the operation appears in — the published "Klutch Public API"
+  Postman collection and the official KlutchCard/api-samples code. Nothing is inferred.
+endpoints:
+  production: https://graphql.klutchcard.com/graphql
+  sandbox: https://sandbox.klutchcard.com/graphql
+  transport: 'POST application/json, Authorization: Bearer <token>'
+groups:
+- group: Auth
+  operations:
+  - name: createSessionToken
+    kind: mutation
+    arguments: [{name: clientId, type: String}, {name: secretKey, type: String}]
+    returns: String (bearer session token)
+- group: Transactions
+  operations:
+  - name: transactions
+    kind: query
+    description: List all transactions for a user with enriched merchant and acquirer
+      metadata.
+    returns_fields: [id, transactionDate, card, transactionStatus, transactionType,
+      merchantName, amount, category, mcc, zipCode, streetAddress, city, state,
+      merchantId, cardPresent, cardHolderPresent, entryMode, terminalType, terminalId,
+      merchantLogo, mid, merchantOfficialPage, merchantPhoneNumber, cardAcceptorId]
+  - name: transactionsPaginated
+    kind: query
+    description: Cursor-paginated, filtered, sorted transaction list.
+    arguments: [{name: filter, type: TransactionFilter}, {name: sortOrder, type: TransactionSortOrder},
+      {name: limit, type: Int}, {name: nextCursor, type: String}]
+    returns_fields: [nextCursor, list]
+  - name: transaction
+    kind: query
+    description: Fetch a single transaction, including declineReason and line items.
+    arguments: [{name: id, type: String!}]
+    returns_fields: [transactionStatus, declineReason, items]
+    source: https://github.com/KlutchCard/api-samples
+  - name: groupTransactions
+    kind: query
+    arguments: [{name: filter, type: TransactionFilter}, {name: groupByProperty, type: TransactionGroupByProperty},
+      {name: operation, type: GroupByOperation}]
+    returns_fields: [key, value]
+  - name: sumTransactions
+    kind: query
+    arguments: [{name: filter, type: TransactionFilter}]
+  - name: transactionCategory
+    kind: query
+    arguments: [{name: id, type: String}]
+    returns_fields: [id, name, mccs]
+  - name: transactionCategories
+    kind: query
+    description: List the available transaction categories.
+    source: https://github.com/KlutchCard/api-samples
+  - name: createTransactionCategory
+    kind: mutation
+    arguments: [{name: name, type: String}]
+  - name: transactionCategory.rename
+    kind: mutation
+    arguments: [{name: id, type: String}, {name: name, type: String}]
+  - name: transactionCategory.delete
+    kind: mutation
+    arguments: [{name: id, type: String}]
+  - name: transaction.item.change
+    kind: mutation
+    description: Re-categorize a single line item on a transaction.
+    arguments: [{name: transactionId, type: String!}, {name: itemId, type: String!},
+      {name: categoryId, type: String!}]
+    source: https://github.com/KlutchCard/api-samples
+  deprecated:
+  - name: transactions(filter:)
+    labelled: '(DEPRECATED) List Transactions With Filters'
+    replacement: transactionsPaginated
+    source: postman/klutch-public-api-postman.json
+- group: Transaction rules
+  operations:
+  - name: createTransactionRule
+    kind: mutation
+    description: Create a server-side spend control bound to one or more cards.
+    arguments: [{name: name, type: String}, {name: displayName, type: String}, {name: cardIds,
+        type: '[String]'}, {name: spec, type: TransactionRuleSpecInput}]
+    spec_types: [AccumulatingOverPeriodRuleSpec, AccumulateBetweenDatesRuleSpec,
+      DeclineBasedOnFilterRuleSpec, DayOfWeekRuleSpec, TimeOfDayRuleSpec]
+  - name: transactionRules
+    kind: query
+  - name: transactionRule.delete
+    kind: mutation
+    arguments: [{name: id, type: String}]
+  - name: transactionRule.disableFor
+    kind: mutation
+    description: Temporarily disable a rule for a number of seconds — used to let a
+      declined retry through.
+    arguments: [{name: name, type: String}, {name: durationInSeconds, type: Int}]
+    source: https://github.com/KlutchCard/api-samples
+- group: Cards
+  operations:
+  - {name: cards, kind: query, returns_fields: [id, name, status, lastFour, expirationDate,
+        media, lockState]}
+  - {name: createCard, kind: mutation, arguments: [{name: name, type: String}, {name: media,
+          type: CardMedia}]}
+  - {name: card.cancelCard, kind: mutation, arguments: [{name: id, type: String}, {
+        name: terminateReason, type: TerminateReason}]}
+  - {name: card.activateCard, kind: mutation, arguments: [{name: id, type: String},
+      {name: lastFour, type: String}]}
+  - {name: card.editCard, kind: mutation, arguments: [{name: id, type: String}, {name: name,
+        type: String}]}
+  - {name: card.lock, kind: mutation, arguments: [{name: id, type: String}]}
+  - {name: card.unlock, kind: mutation, arguments: [{name: id, type: String}]}
+- group: Account
+  operations:
+  - {name: account.revolvingLoan, kind: query, returns_fields: [balance, limit]}
+- group: Payments
+  operations:
+  - name: createPayment
+    kind: mutation
+    description: Initiate an ACH payment from a transfer source to the card. Payment
+      types are outstanding balance, minimum due, or a fixed amount greater than
+      $15.00 or the minimum due.
+    arguments: [{name: transferSourceId, type: String}, {name: type, type: PaymentType},
+      {name: amount, type: Float}]
+    returns_fields: [id, paymentStatus, paymentType, amount]
+  - {name: transferSources, kind: query, returns_fields: [id, name, status]}
+- group: Mini Apps
+  operations:
+  - {name: recipeInstall.createToken, kind: mutation, arguments: [{name: id, type: String}]}
+  - {name: recipeInstall.addPanel, kind: mutation, arguments: [{name: id, type: String},
+      {name: templateFileName, type: String}, {name: data, type: JsonString}, {name: entity,
+        type: Entity}, {name: size, type: RecipeSize}]}
+  - {name: recipeInstall.panel.changeData, kind: mutation, arguments: [{name: id, type: String},
+      {name: panelId, type: String}, {name: data, type: JsonString}]}
+  - {name: recipeInstall.panel.delete, kind: mutation, arguments: [{name: id, type: String},
+      {name: panelId, type: String}]}
+- group: Sandbox
+  operations:
+  - {name: sandbox.createTransaction, kind: mutation}
+  - {name: sandbox.reverseTransaction, kind: mutation}
+  - {name: sandbox.settleTransaction, kind: mutation}
+enums:
+  TransactionGroupByProperty: [CARD, MERCHANT_NAME, TRANSACTION_STATUS, TRANSACTION_TYPE,
+    CATEGORY]
+  GroupByOperation: [SUM, COUNT, AVERAGE]
+  TransactionRuleFilterField: [ADDRESS, AMOUNT, CARDHOLDER_PRESENT, CARD_PRESENT, CITY,
+    ENTRY_MODE, ID, LEGAL_NAME, MCC, MERCHANT_ID, MERCHANT_NAME, STATE, TERMINAL_ID,
+    ZIP_CODE]
+  TransactionRuleFilterOperator: [CONTAINS, EQUALS, GREATER, GREATER_EQUALS, LESS,
+    LESS_EQUALS, REGEX_MATCHES, STARTS_WITH]
+  TransferSourceStatus: [PENDING, ACTIVE, DELETED]

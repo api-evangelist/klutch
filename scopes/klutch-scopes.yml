@@ -1,0 +1,49 @@
+generated: '2026-07-19'
+method: searched
+source: well-known/klutch-graphql-oauth-authorization-server.json,
+  well-known/klutch-mcp-oauth-protected-resource.json
+docs: null
+docs_note: >-
+  Klutch does not publish a scopes / permissions reference page. The scope list below
+  is taken verbatim from the live RFC 8414 authorization-server metadata on all three
+  hosts and the RFC 9728 protected-resource metadata on the MCP server, which agree.
+  These are the standard OpenID Connect identity scopes — Klutch does not expose
+  resource-level (cards / transactions / rules) scopes over OAuth. Fine-grained access
+  is instead governed by the Mini App permission model, where the installing user
+  grants a Mini App the ability to create cards, read transactions and create spending
+  controls.
+schemes:
+- name: oauth2
+  source: well-known/klutch-graphql-oauth-authorization-server.json
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://graphql.klutchcard.com/oauth/authorize
+    tokenUrl: https://graphql.klutchcard.com/oauth/token
+    code_challenge_methods_supported: [S256]
+scopes:
+- scope: openid
+  description: OpenID Connect subject identifier; required to obtain an ID token.
+  flows: [authorizationCode]
+  sources: [well-known/klutch-graphql-oauth-authorization-server.json, well-known/klutch-mcp-oauth-protected-resource.json]
+- scope: email
+  description: The user's email address claim.
+  flows: [authorizationCode]
+  sources: [well-known/klutch-graphql-oauth-authorization-server.json, well-known/klutch-mcp-oauth-protected-resource.json]
+- scope: phone
+  description: The user's phone number claim.
+  flows: [authorizationCode]
+  sources: [well-known/klutch-graphql-oauth-authorization-server.json, well-known/klutch-mcp-oauth-protected-resource.json]
+- scope: profile
+  description: The user's basic profile claims.
+  flows: [authorizationCode]
+  sources: [well-known/klutch-graphql-oauth-authorization-server.json, well-known/klutch-mcp-oauth-protected-resource.json]
+miniapp_permissions:
+  model: >-
+    Documented in the Klutch Public API collection as the "Miniapp Developer" mode:
+    a registered Mini App authenticates on behalf of a user and, once authorized by
+    that user, may act in their context.
+  granted_capabilities:
+  - Create cards on behalf of users
+  - Read transactions
+  - Create spending controls
+  source: postman/klutch-public-api-postman.json

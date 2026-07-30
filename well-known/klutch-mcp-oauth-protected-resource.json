@@ -1,0 +1,8 @@
+{
+  "resource": "https://mcp.klutchcard.com",
+  "authorization_servers": [
+    "https://mcp.klutchcard.com"
+  ],
+  "scopes_supported": ["openid", "email", "phone", "profile"],
+  "bearer_methods_supported": ["header"]
+}

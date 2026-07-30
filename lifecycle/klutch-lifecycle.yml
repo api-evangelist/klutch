@@ -1,0 +1,49 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.klutchcard.com/developer, postman/klutch-public-api-postman.json,
+  live host probes
+versioning:
+  scheme: unversioned
+  current: null
+  detail: >-
+    The Klutch GraphQL endpoints carry no version segment, no version header and no
+    date-pinning scheme. Change is absorbed the GraphQL way — fields and operations are
+    added, and superseded operations are labelled deprecated in the published
+    collection rather than removed behind a version.
+  docs: https://api-docs.klutchcard.com/
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  detail: >-
+    No written deprecation or sunset policy, no RFC 8594 Sunset/Deprecation header
+    support documented. Deprecation is signalled only by naming in the published
+    Postman collection.
+deprecated_operations:
+- operation: transactions(filter:)
+  labelled_as: '(DEPRECATED) List Transactions With Filters'
+  replacement: transactionsPaginated
+  source: postman/klutch-public-api-postman.json
+sla:
+  url: null
+  uptime_target: null
+  published: false
+status_page:
+  url: null
+  published: false
+  probe: 'status.klutchcard.com does not resolve (DNS NXDOMAIN, probed 2026-07-19)'
+changelog:
+  url: null
+  published: false
+  note: >-
+    No dated developer changelog was found; /changelog returns 404 and the /articles
+    feed is marketing/tutorial content rather than release notes. changelog/ is
+    therefore intentionally absent rather than fabricated.
+support:
+  help_center: https://help.klutchcard.com/
+  email: support@klutchcard.com
+maturity_signals:
+  cli_status: early access (per the CLI README)
+  legacy_identity: >-
+    The platform's internal type namespace and legacy npm package still use
+    "alloycard"/"Alloy", evidence of the pre-Klutch product identity.

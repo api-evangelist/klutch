@@ -1,0 +1,71 @@
+generated: '2026-07-19'
+method: searched
+source: https://registry.npmjs.org / https://github.com/KlutchCard
+notes: >-
+  All first-party Klutch client libraries are published to npm under the
+  @klutch-card scope. No PyPI, Maven Central, NuGet, pkg.go.dev, RubyGems, Packagist
+  or crates.io packages were found — Klutch ships JavaScript/TypeScript only.
+  klutch-js (unscoped) is the legacy package from the company's earlier "Alloy Card"
+  identity and is retained here for provenance, not for new integrations.
+packages:
+- language: javascript
+  registry: npm
+  name: '@klutch-card/klutch-js'
+  version: 1.11.1
+  url: https://www.npmjs.com/package/@klutch-card/klutch-js
+  repository: https://github.com/KlutchCard/klutch-js
+  install: npm install @klutch-card/klutch-js
+  license: ISC
+  description: Klutch SDK for JavaScript — client for the Klutch Public GraphQL API.
+  kind: sdk
+  official: true
+  last_published: '2026-07-15'
+- language: javascript
+  registry: npm
+  name: '@klutch-card/klutch-cli'
+  version: 1.1.3
+  url: https://www.npmjs.com/package/@klutch-card/klutch-cli
+  install: npm install -g @klutch-card/klutch-cli
+  binary: klutch
+  license: MIT
+  description: Klutch CLI for Mini App developers — key generation, scaffolding,
+    login, sandbox publish and sandbox test users.
+  kind: cli
+  official: true
+  last_published: '2024-03-07'
+- language: javascript
+  registry: npm
+  name: '@klutch-card/klutch-components'
+  version: 0.4.11
+  url: https://www.npmjs.com/package/@klutch-card/klutch-components
+  repository: https://github.com/KlutchCard/klutch-components
+  install: npm install @klutch-card/klutch-components
+  license: ISC
+  description: Klutch Components for Mini Apps — the UI component library Mini App
+    panels are built from.
+  kind: components
+  official: true
+  last_published: '2024-04-17'
+- language: javascript
+  registry: npm
+  name: klutch-js
+  version: 1.4.64
+  url: https://www.npmjs.com/package/klutch-js
+  repository: https://github.com/KlutchCard/alloy-js
+  install: npm install klutch-js
+  license: ISC
+  description: Legacy "Alloy SDK for Javascript" published by the same team before
+    the Klutch rebrand. Superseded by @klutch-card/klutch-js.
+  kind: sdk
+  official: true
+  deprecated: true
+  last_published: '2022-05-07'
+registries_checked:
+- {registry: npm, result: 4 first-party packages}
+- {registry: pypi, result: none}
+- {registry: maven-central, result: none}
+- {registry: nuget, result: none}
+- {registry: pkg.go.dev, result: none}
+- {registry: rubygems, result: none}
+- {registry: packagist, result: none}
+- {registry: crates.io, result: none}
