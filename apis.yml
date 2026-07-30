@@ -1,8 +1,31 @@
 aid: klutch
 name: Klutch
-description: Klutch is a company surfaced as a portfolio company of 500-global, bain-capital-ventures
-  and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the
-  enrichment pipeline.
+description: 'Klutch (Klutch Card) is a US consumer fintech that issues an "app-powered"
+  programmable credit card — Klutch Credit (unsecured) and Klutch Spend (collateralized
+  prepaid) — whose behavior is extended by user-installable Mini Apps. Its public
+  GraphQL API lets developers and Mini App builders list and group enriched card
+  transactions (including acquirer metadata such as MCC, entry mode, terminal type and
+  card-present flags), create and lock virtual cards, author server-side transaction
+  rules that accumulate or decline spend by filter, day of week or time of day, read
+  balances, initiate ACH card payments, and render Mini App panels back into the Klutch
+  mobile experience. Klutch ships a production and a sandbox GraphQL endpoint with
+  transaction simulation mutations, OAuth 2.1 with PKCE and dynamic client registration,
+  transaction webhooks, a developer CLI, a first-party JavaScript SDK and Mini App
+  component library, and a remote MCP server that lets Claude and ChatGPT operate the
+  card in natural language.'
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://cdn.prod.website-files.com/660d6194e5d7f9c60a769ac1/664dff628523869c6ec161ad_image%2B2.jpg
 url: https://raw.githubusercontent.com/api-evangelist/klutch/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -13,10 +36,56 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
-apis: []
+- Financial Services
+- Fintech
+- Credit Cards
+- Payments
+- Card Issuing
+- Virtual Cards
+- Transactions
+- Spend Management
+- Personal Finance
+- GraphQL
+- Embedded Finance
+- Agents
+apis:
+- aid: klutch:klutch-public-api
+  name: Klutch Public API
+  description: 'The Klutch Public API is a GraphQL API for the Klutch programmable
+    credit card. It exposes enriched transaction history with filtering, cursor
+    pagination and group-by aggregation; user-defined transaction categories; virtual
+    and physical card lifecycle (create, activate, edit, lock, unlock, cancel);
+    server-side transaction rules (accumulating over a period, accumulating between
+    dates, decline-based-on-filter, day of week, time of day); account balance and
+    revolving loan limits; ACH card payments and transfer sources; and Mini App panel
+    rendering. Authentication is a bearer session token minted from a developer client
+    id and secret key, or OAuth 2.1 authorization code with PKCE for user-consented
+    agents.'
+  humanURL: https://www.klutchcard.com/developer
+  baseURL: https://graphql.klutchcard.com/graphql
+  tags:
+  - GraphQL
+  - Credit Cards
+  - Transactions
+  - Virtual Cards
+  - Spend Controls
+  - Payments
+  properties:
+  - type: Documentation
+    url: https://api-docs.klutchcard.com/
+  - type: APIReference
+    url: https://api-docs.klutchcard.com/
+  - type: Postman
+    url: https://api-docs.klutchcard.com/
+  - type: PostmanCollection
+    url: postman/klutch-public-api-postman.json
+  - type: GraphQL
+    url: graphql/klutch-graphql-operations.yml
+  - type: Sandbox
+    url: https://sandbox.klutchcard.com/graphql
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -25,3 +94,72 @@ maintainers:
 common:
 - type: Website
   url: https://klutchcard.com
+- type: DeveloperPortal
+  url: https://www.klutchcard.com/developer
+- type: Documentation
+  url: https://api-docs.klutchcard.com/
+- type: APIReference
+  url: https://api-docs.klutchcard.com/
+- type: GettingStarted
+  url: https://www.klutchcard.com/tutorials
+- type: Postman
+  url: https://api-docs.klutchcard.com/
+- type: Support
+  url: https://help.klutchcard.com/
+- type: HelpCenter
+  url: https://help.klutchcard.com/en/
+- type: Blog
+  url: https://www.klutchcard.com/articles
+- type: GitHubOrganization
+  url: https://github.com/KlutchCard
+- type: Pricing
+  url: https://www.klutchcard.com/#pricing
+- type: SignUp
+  url: https://app.klutch.cards/apply/signup
+- type: Login
+  url: https://app.klutch.cards/login
+- type: TermsOfService
+  url: https://www.klutchcard.com/terms-of-service
+- type: PrivacyPolicy
+  url: https://www.klutchcard.com/privacy-policy
+- type: Packages
+  url: packages/klutch-packages.yml
+- type: SDKs
+  url: packages/klutch-packages.yml
+- type: CLI
+  url: cli/klutch-cli.yml
+- type: Components
+  url: components/klutch-components.yml
+- type: MCPServer
+  url: mcp/klutch-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/klutch-llms.txt
+- type: WellKnown
+  url: well-known/klutch-well-known.yml
+- type: Authentication
+  url: authentication/klutch-authentication.yml
+- type: OAuthScopes
+  url: scopes/klutch-scopes.yml
+- type: Conventions
+  url: conventions/klutch-conventions.yml
+- type: ErrorCatalog
+  url: errors/klutch-error-codes.yml
+- type: Lifecycle
+  url: lifecycle/klutch-lifecycle.yml
+- type: Conformance
+  url: conformance/klutch-conformance.yml
+- type: DataModel
+  url: data-model/klutch-data-model.yml
+- type: Sandbox
+  url: sandbox/klutch-sandbox.yml
+- type: Webhooks
+  url: asyncapi/klutch-webhooks.yml
+- type: DomainSecurity
+  url: security/klutch-domain-security.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence
