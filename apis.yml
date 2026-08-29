@@ -13,6 +13,17 @@ description: 'Klutch (Klutch Card) is a US consumer fintech that issues an "app-
   transaction webhooks, a developer CLI, a first-party JavaScript SDK and Mini App
   component library, and a remote MCP server that lets Claude and ChatGPT operate the
   card in natural language.'
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
