@@ -50,7 +50,7 @@ created: '2026-07-17'
 modified: '2026-07-19'
 tags:
 - Company
-- Financial-Services
+- Financial Services
 - Fintech
 - Credit Cards
 - Payments
@@ -76,6 +76,7 @@ tags_raw:
 - GraphQL
 - Embedded Finance
 - Agents
+- Financial-Services
 apis:
 - aid: klutch:klutch-public-api
   name: Klutch Public API
