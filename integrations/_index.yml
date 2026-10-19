@@ -28,3 +28,43 @@
     builder: unknown (not in the directory record)
   status: not-a-workflow
   arazzo: null
+- slug: klutch-npm-registry
+  label: npm registry
+  partner: npm
+  partner_name: npm registry
+  category: official SDK (JavaScript/TypeScript)
+  type: register
+  channel: package-registry
+  evidence: https://www.npmjs.com/package/@klutch-card/klutch-components
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: npm registry (public registry JSON)
+    spec_file: null
+    language: JavaScript/TypeScript
+    packages:
+    - name: '@klutch-card/klutch-components'
+      version: 0.4.11
+      released: '2024-04-17'
+      released_field: modified
+      lapsed: true
+      page: https://www.npmjs.com/package/@klutch-card/klutch-components
+      repo_leg: github-org:klutchcard
+      publisher_leg: email:klutchcard.com
+      matched_by: domain
+    - name: '@klutch-card/klutch-js'
+      version: 1.14.1
+      released: '2026-10-08'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@klutch-card/klutch-js
+      repo_leg: github-org:klutchcard
+      publisher_leg: email:klutchcard.com
+      matched_by: domain
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  status: not-a-workflow
+  arazzo: null
