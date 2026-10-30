@@ -64,50 +64,114 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Klutch (Klutch Card) issues an "app-powered" programmable credit card — Klutch Credit (unsecured) and Klutch Spend (collateralized prepaid) — whose behavior is extended by user-installable Mini Apps. Its public GraphQL API exposes enriched card transactions with acquirer metadata, virtual card lifecycle, server-side transaction rules that approve or decline spend in real time, account balances, ACH card payments, and Mini App panel rendering.
+Klutch (Klutch Card) is a US consumer fintech that issues an "app-powered" programmable credit card — Klutch Credit (unsecured) and Klutch Spend (collateralized prepaid) — whose behavior is extended by user-installable Mini Apps. Its public GraphQL API lets developers and Mini App builders list and group enriched card transactions (including acquirer metadata such as MCC, entry mode, terminal type and card-present flags), create and lock virtual cards, author server-side transaction rules that accumulate or decline spend by filter, day of week or time of day, read balances, initiate ACH card payments, and render Mini App panels back into the Klutch mobile experience. Klutch ships a production and a sandbox GraphQL endpoint with transaction simulation mutations, OAuth 2.1 with PKCE and dynamic client registration, transaction webhooks, a developer CLI, a first-party JavaScript SDK and Mini App component library, and a remote MCP server that lets Claude and ChatGPT operate the card in natural language.
 
-- Website: https://klutchcard.com
-- Developers: https://www.klutchcard.com/developer
-- API reference (Postman): https://api-docs.klutchcard.com/
-- GitHub: https://github.com/KlutchCard
+**Areas:** Company · Financial Services · Fintech · Credit Cards · Payments · Card Issuing · Virtual Cards · Transaction · Spend Management · Personal Finance · GraphQL · Embedded Finance
 
-## API surface
+## Klutch on APIs.io
 
-| | |
+Everything profiled for Klutch is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/klutch/](https://apis.io/providers/klutch/)** — or go straight to one of the APIs or properties below.
+
+### APIs (1)
+
+- [Klutch Public API](https://apis.io/apis/klutch/klutch-public-api/) — The Klutch Public API is a GraphQL API for the Klutch programmable credit card. It exposes enriched transaction history with filtering, cursor pagination…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Klutch Webhooks](https://apis.io/asyncapis/klutch/klutch-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [klutch](https://apis.io/servers/klutch/klutch/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Klutch Authentication](https://apis.io/security/klutch/klutch-authentication/)
+- [Klutch Domain Security](https://apis.io/security/klutch/klutch-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Klutch Scopes](https://apis.io/scopes/klutch/klutch-scopes/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://klutchcard.com)
+- [Documentation](https://api-docs.klutchcard.com/)
+- [Getting started](https://www.klutchcard.com/tutorials)
+- [API reference](https://api-docs.klutchcard.com/)
+- [Pricing](https://www.klutchcard.com/#pricing)
+- [Sign up](https://app.klutch.cards/apply/signup)
+- [Support](https://help.klutchcard.com/)
+- [Blog](https://www.klutchcard.com/articles)
+- [Terms of service](https://www.klutchcard.com/terms-of-service)
+- [Privacy policy](https://www.klutchcard.com/privacy-policy)
+- [GitHub](https://github.com/KlutchCard)
+
+## API Evangelist rating
+
+**Kin Score 42.9** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
 |---|---|
-| Style | GraphQL (single endpoint, introspection disabled) |
-| Production | `https://graphql.klutchcard.com/graphql` |
-| Sandbox | `https://sandbox.klutchcard.com/graphql` |
-| Auth | Bearer session token (`createSessionToken`) or OAuth 2.1 authorization code + PKCE |
-| MCP | `https://mcp.klutchcard.com` (remote, OAuth-protected, Claude + ChatGPT) |
-| Events | Transaction webhooks (registered in the account UI) |
+| Discoverability | 75.0 |
+| Contract quality | 39.0 |
+| Contract governance | 4.5 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 76.8 |
+| Access clarity | 32.9 |
 
-## Artifacts in this repo
+**Agent readiness 41.9** — agent-ready (gated down from agent-native)
 
-| Artifact | File |
+| Agent-readiness dimension | Result |
 |---|---|
-| Operation catalog | `graphql/klutch-graphql-operations.yml` |
-| Postman collection (verbatim) | `postman/klutch-public-api-postman.json` |
-| Packages / SDKs | `packages/klutch-packages.yml` |
-| CLI | `cli/klutch-cli.yml` |
-| Mini App components | `components/klutch-components.yml` |
-| MCP server | `mcp/klutch-mcp.yml` |
-| Agent Skills | `skills/_index.yml` |
-| Authentication | `authentication/klutch-authentication.yml` |
-| OAuth scopes | `scopes/klutch-scopes.yml` |
-| Well-known | `well-known/klutch-well-known.yml` |
-| Conventions | `conventions/klutch-conventions.yml` |
-| Errors | `errors/klutch-error-codes.yml` |
-| Webhook catalog | `asyncapi/klutch-webhooks.yml` |
-| Sandbox | `sandbox/klutch-sandbox.yml` |
-| Data model | `data-model/klutch-data-model.yml` |
-| Lifecycle | `lifecycle/klutch-lifecycle.yml` |
-| Conformance | `conformance/klutch-conformance.yml` |
-| Domain security | `security/klutch-domain-security.yml` |
-| llms.txt | `llms/klutch-llms.txt` |
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
 
-## Notable gaps (as of 2026-07-19)
+**Regulatory alignment 31.3** — Payments
 
-No OpenAPI or AsyncAPI document, no `security.txt`, no status page, no published changelog, no deprecation policy, no documented rate limits, and **no idempotency contract** — which matters, because `createPayment` moves money.
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/klutch/](https://apis.io/providers/klutch/).
 
-Backed by: 500 Global, Bain Capital Ventures.
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Klutch: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/klutch/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
